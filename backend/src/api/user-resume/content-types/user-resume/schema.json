@@ -23,6 +23,45 @@
     },
     "userName": {
       "type": "string"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "jobTitle": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "text"
+    },
+    "experience": {
+      "type": "component",
+      "component": "experience.experience",
+      "repeatable": true
+    },
+    "education": {
+      "type": "component",
+      "component": "education.education",
+      "repeatable": true
+    },
+    "skills": {
+      "type": "component",
+      "component": "skills.skills",
+      "repeatable": true
+    },
+    "themeColor": {
+      "type": "string"
     }
   }
 }

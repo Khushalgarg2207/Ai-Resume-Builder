@@ -2,16 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
+@media print {
+  #no-print {
+    display: none;
+  }
+
+  #print-area {
+    display: block;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+}
+
+@page {
+  size:auto;
+  margin: 0mm;
+}
+
 /* Base styles applied globally */
+.rsw-ce ul {
+  list-style: disc;
+  padding-left: 2em;
+}
+
+.rsw-ce ol {
+  list-style: decimal;
+  padding-left: 2em;
+}
 
 @layer base {
+  /* Remove border from ALL elements globally */
   * {
-    @apply border border-gray-300;
-    outline: none; /* remove or customize as needed */
+    outline: none; /* Remove default outline, customize as needed */
   }
+
+  /* Apply border only on typical interactive elements */
+  input,
+  textarea,
+  select,
+  button {
+    @apply border border-gray-300 rounded-md;
+    outline: none;
+  }
+
+  /* Optional: Add focus styles for accessibility */
+  input:focus,
+  textarea:focus,
+  select:focus,
+  button:focus {
+    @apply ring-2 ring-blue-500 ring-offset-2;
+    outline: none;
+  }
+
+  /* Body background and foreground text colors */
   body {
     @apply bg-background text-foreground;
   }
 }
-
-/* Your CSS variables and dark mode themes are managed elsewhere */

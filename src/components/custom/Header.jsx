@@ -6,12 +6,12 @@ import { UserButton, useUser } from '@clerk/clerk-react'
 function Header() {
   const {user, isSignedIn} = useUser();
   return (
-    <div className='p-3 px-5 flex justify-between shadow-md'>
+    <div className='flex justify-between items-center px-5 py-3 border-2 border-gray-300 rounded-md'>
       <img src='/logo.svg' height={100} width={100}/>
 
       {
         isSignedIn ? 
-        <div className='flex gap-2 items-center'>
+        <div className='flex gap-3 items-center'>
           <Link to={'/dashboard'}>
           <Button>Dashboard</Button>
           </Link>

@@ -15,6 +15,7 @@
     margin: 0;
     padding: 0;
     box-shadow: none;
+    background-color: #ff0000;
   }
 }
 
@@ -23,7 +24,6 @@
   margin: 0mm;
 }
 
-/* Base styles applied globally */
 .rsw-ce ul {
   list-style: disc;
   padding-left: 2em;
@@ -35,12 +35,10 @@
 }
 
 @layer base {
-  /* Remove border from ALL elements globally */
   * {
-    outline: none; /* Remove default outline, customize as needed */
+    outline: none;
   }
 
-  /* Apply border only on typical interactive elements */
   input,
   textarea,
   select,
@@ -49,7 +47,6 @@
     outline: none;
   }
 
-  /* Optional: Add focus styles for accessibility */
   input:focus,
   textarea:focus,
   select:focus,
@@ -58,7 +55,6 @@
     outline: none;
   }
 
-  /* Body background and foreground text colors */
   body {
     @apply bg-background text-foreground;
   }

@@ -16,7 +16,7 @@ function ExperiencePreview({resumeInfo}) {
 
         {resumeInfo?.experience.map((experience,index) => (
             <div key={index} className='my-5'>
-                <h2 className='text-sm font-bold'
+                <h2 className='text-xs font-bold'
                 style={{
                     color:resumeInfo?.themeColor
                 }}
@@ -26,10 +26,7 @@ function ExperiencePreview({resumeInfo}) {
                     {experience?.state}
                     <span>{experience?.startDate} to {experience?.currentlyWorking?'Present':experience.endDate}</span>
                     </h2>
-                {/* <p className='text-xs my-2'>
-                    {experience?.workSummery}
-                </p> */}
-                <div dangerouslySetInnerHTML={{__html:experience?.workSummary}} />
+                <div className='text-xs' dangerouslySetInnerHTML={{__html:experience?.workSummary}} />
             </div>
         ))}
     </div>

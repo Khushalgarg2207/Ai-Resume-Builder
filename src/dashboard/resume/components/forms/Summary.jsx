@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import React, { useContext, useEffect, useState } from "react";
-import GlobalApi from './../../../../../service/GlobalApi'
+import GlobalApi from './../../../../../service/GlobalApi';
 import { useParams } from "react-router-dom";
 import { Brain, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
-import { sendToGemini } from './../../../../../service/AI_Model'
+import { sendToGemini } from './../../../../../service/AI_Model';
 
 const prompt =
   "Job Title: {jobTitle}. Based on this job title, write a professional, 2-3 sentence resume summary suitable for that role.";
@@ -21,14 +21,10 @@ function Summary({ enabledNext }) {
     setSummary(resumeInfo.summary || "");
   }, [resumeInfo.summary]);
 
-  useEffect(() => {
-    if (summary !== undefined && summary !== resumeInfo.summary) {
-      setResumeInfo({
-        ...resumeInfo,
-        summary,
-      });
-    }
-  }, [summary]);
+  const handleChange = (e) => {
+    setSummary(e.target.value);
+    setResumeInfo(prev => ({ ...prev, summary: e.target.value }));
+  };
 
   const GenSummFromAI = async () => {
     if (!resumeInfo?.jobTitle) {
@@ -39,8 +35,8 @@ function Summary({ enabledNext }) {
     const PROMPT = prompt.replace("{jobTitle}", resumeInfo.jobTitle);
     try {
       const result = await sendToGemini(PROMPT);
-      console.log("Gemini AI response:", result);
       setSummary(result);
+      setResumeInfo(prev => ({ ...prev, summary: result })); 
     } catch (err) {
       toast("AI generation failed: " + (err.message || err));
     } finally {
@@ -56,6 +52,7 @@ function Summary({ enabledNext }) {
     };
     try {
       await GlobalApi.UpdateResumeDetail(params?.resumeId, data);
+      setResumeInfo(prev => ({ ...prev, summary })); 
       enabledNext(true);
       toast("Details Updated");
     } catch {
@@ -89,7 +86,7 @@ function Summary({ enabledNext }) {
           className="mt-5 h-24"
           required
           value={summary}
-          onChange={(e) => setSummary(e.target.value)}
+          onChange={handleChange}
           disabled={loading}
         />
         <div className="mt-2 flex justify-end">

@@ -8,7 +8,6 @@ import GlobalApi from './../../../../../service/GlobalApi';
 import { toast } from 'sonner';
 import { LoaderCircle } from 'lucide-react';
 
-// Helper: Blank new education entry
 const getNewEducation = () => ({
   universityName: '',
   degree: '',
@@ -24,7 +23,6 @@ function Education() {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const params = useParams();
 
-  // Initialize local state from context whenever context changes
   useEffect(() => {
     if (resumeInfo?.education && Array.isArray(resumeInfo.education)) {
       setEducationalList(
@@ -35,22 +33,35 @@ function Education() {
     }
   }, [resumeInfo?.education]);
 
-  // Handlers for form actions
   const handleChange = (index, event) => {
     const { name, value } = event.target;
-    setEducationalList(prev => {
-      const result = [...prev];
-      result[index][name] = value;
-      return result;
-    });
+    const updatedList = [...educationalList];
+    updatedList[index][name] = value;
+    setEducationalList(updatedList);
+    setResumeInfo(prev => ({
+      ...prev,
+      education: updatedList
+    }));
   };
 
   const AddNewEducation = () => {
-    setEducationalList(prev => [...prev, getNewEducation()]);
+    const updatedList = [...educationalList, getNewEducation()];
+    setEducationalList(updatedList);
+    setResumeInfo(prev => ({
+      ...prev,
+      education: updatedList
+    }));
   };
 
   const RemoveEducation = () => {
-    setEducationalList(prev => (prev.length > 1 ? prev.slice(0, -1) : prev));
+    if (educationalList.length > 1) {
+      const updatedList = educationalList.slice(0, -1);
+      setEducationalList(updatedList);
+      setResumeInfo(prev => ({
+        ...prev,
+        education: updatedList
+      }));
+    }
   };
 
   const prepareEducationPayload = () =>
@@ -74,7 +85,6 @@ function Education() {
     };
     try {
       await GlobalApi.UpdateResumeDetail(params.resumeId, data);
-      // Only set context once after saving to update in memory (not on every field change!)
       setResumeInfo({ ...resumeInfo, education: educationalList });
       toast('Details Updated!');
     } catch (error) {

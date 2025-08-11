@@ -23,7 +23,6 @@ function ThemeColor() {
   const [selectedColor, setSelectedColor] = useState(resumeInfo?.themeColor || '')
   const { resumeId } = useParams()
 
-  // This function uses PUT and sends ALL required fields!
   const onColorSelect = async (color) => {
     setSelectedColor(color)
     setResumeInfo({
@@ -31,16 +30,10 @@ function ThemeColor() {
       themeColor: color
     })
 
-    // 💡 Build a payload with ALL required fields (adjust as needed)
     const data = {
       data: {
-        // Include all fields needed by your Strapi model,
-        // below are common ones; adjust if your model is different!
         title: resumeInfo.title,
         userEmail: resumeInfo.userEmail,
-        // Add other required fields here:
-        // fieldName: resumeInfo.fieldName,
-        // etc...
         themeColor: color
       }
     }

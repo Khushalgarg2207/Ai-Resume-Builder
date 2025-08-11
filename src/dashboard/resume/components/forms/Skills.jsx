@@ -5,7 +5,7 @@ import '@smastrom/react-rating/style.css';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import { ResumeInfoContext } from '@/context/ResumeInfoContext';
-import GlobalApi from './../../../../../service/GlobalApi'
+import GlobalApi from './../../../../../service/GlobalApi';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -15,12 +15,11 @@ const getNewSkill = () => ({
 });
 
 function Skills() {
-  const [skillsList, setSkillsList] = useState([getNewSkill()]); // default at least one skill!
+  const [skillsList, setSkillsList] = useState([getNewSkill()]);
   const { resumeId } = useParams();
   const [loading, setLoading] = useState(false);
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
 
-  // Load form state from context (one-way) whenever context.skills changes
   useEffect(() => {
     if (resumeInfo?.skills && Array.isArray(resumeInfo.skills)) {
       setSkillsList(
@@ -31,21 +30,34 @@ function Skills() {
     }
   }, [resumeInfo?.skills]);
 
-  // Controlled handlers
   const handleChange = (index, name, value) => {
-    setSkillsList(prev => {
-      const result = [...prev];
-      result[index][name] = value;
-      return result;
-    });
+    const result = [...skillsList];
+    result[index][name] = value;
+    setSkillsList(result);
+    setResumeInfo(prev => ({
+      ...prev,
+      skills: result
+    }));
   };
 
   const AddNewSkills = () => {
-    setSkillsList(prev => [...prev, getNewSkill()]);
+    const result = [...skillsList, getNewSkill()];
+    setSkillsList(result);
+    setResumeInfo(prev => ({
+      ...prev,
+      skills: result
+    }));
   };
 
   const RemoveSkills = () => {
-    setSkillsList(prev => prev.length > 1 ? prev.slice(0, -1) : prev);
+    if (skillsList.length > 1) {
+      const result = skillsList.slice(0, -1);
+      setSkillsList(result);
+      setResumeInfo(prev => ({
+        ...prev,
+        skills: result
+      }));
+    }
   };
 
   const prepareSkillsPayload = () =>
@@ -61,10 +73,8 @@ function Skills() {
         skills: prepareSkillsPayload()
       }
     };
-
     try {
       await GlobalApi.UpdateResumeDetail(resumeId, data);
-      // Only update context after successful save
       setResumeInfo({ ...resumeInfo, skills: skillsList });
       toast('Details updated!');
     } catch (error) {
@@ -85,7 +95,6 @@ function Skills() {
     <div className='p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10'>
       <h2 className='font-bold text-lg'>Skills</h2>
       <p>Add your top professional key skills</p>
-
       <div>
         {skillsList.map((item, index) => (
           <div key={index}>

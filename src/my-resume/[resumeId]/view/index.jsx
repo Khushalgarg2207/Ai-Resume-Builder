@@ -17,7 +17,6 @@ function ViewResume() {
         setResumeInfo(resp.data.data)
       } catch (err) {
         console.error('Error fetching resume:', err)
-        // Optionally show user-facing error
       }
     }
     GetResumeInfo()
@@ -25,40 +24,6 @@ function ViewResume() {
 
   const handleDownload = () => {
     window.print()
-  }
-
-  const shareData = resumeInfo
-    ? {
-        text: "Hello Everyone, this is my resume. Open the URL to proceed.",
-        url:
-          import.meta.env.VITE_BASE_URL +
-          "/my-resume/" +
-          resumeId +
-          "/view",
-        title:
-          (resumeInfo.firstName || "") +
-          " " +
-          (resumeInfo.lastName || "") +
-          " / resume",
-      }
-    : null
-
-  const handleWebShare = async () => {
-    if (!shareData) return
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData)
-        // Optional: show a toast/message for successful share
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          // Only log real errors, ignore abort (user canceled)
-          console.error("Share failed:", err)
-        }
-      }
-    } else {
-      alert("Sharing is not supported on this browser.")
-    }
   }
 
   return (
@@ -72,11 +37,8 @@ function ViewResume() {
           <p className="text-center text-gray-400">
             Now you can download your resume
           </p>
-          <div className="flex justify-between px-44 my-10">
+          <div className="flex flex-col gap-4 items-center px-44 my-10">
             <Button onClick={handleDownload}>Download</Button>
-            <Button onClick={handleWebShare} disabled={!resumeInfo}>
-              Share
-            </Button>
           </div>
         </div>
       </div>
